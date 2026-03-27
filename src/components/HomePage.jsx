@@ -5,18 +5,24 @@ import NotebookResumeButton from "./NotebookResumeButton";
 function HomePage({ skills, contact }) {
   return (
     <div className="home-page page">
-      <div className="home-content">
-        <p className="eyebrow">Aspiring Data Scientist</p>
-        <h1>Pratham Patil</h1>
-        <p className="lede">
-          Freshman CSE student with a growing passion for machine learning, data engineering algorithms, 
-          and building transparent model pipelines from the ground up.
-        </p>
-        <div className="hero-actions">
-          <NotebookResumeButton />
-          <a className="btn ghost" href={contact.linkedin} target="_blank" rel="noreferrer">
-            LinkedIn
-          </a>
+      <div className="hero-content-wrapper">
+        <div className="home-content">
+          <p className="eyebrow">Aspiring Data Scientist</p>
+          <h1>Pratham Patil</h1>
+          <p className="lede">
+            Freshman CSE student with a growing passion for machine learning, data engineering algorithms, 
+            and building transparent model pipelines from the ground up.
+          </p>
+          <div className="hero-actions">
+            <NotebookResumeButton />
+            <a className="btn ghost" href={contact.linkedin} target="_blank" rel="noreferrer">
+              LinkedIn
+            </a>
+          </div>
+        </div>
+        <div className="hero-image">
+          {/* Replace profile.jpg with your actual photo file in the public folder */}
+          <img src="/profile.png" alt="Pratham Patil" className="profile-img" />
         </div>
       </div>
 

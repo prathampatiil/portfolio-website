@@ -6,11 +6,15 @@ function AboutPage({ highlights, skills }) {
     <section className="page about-page">
       <div className="section-heading">
         <p className="eyebrow">About Me</p>
-        <h2>Data science & engineering focused on reproducibility</h2>
-        <p>
-          I am passionate about turning raw data into clear, actionable insights by building structured pipelines,
-          conducting exploratory analysis, and training foundational machine learning models.
-        </p>
+        <h2>Aspiring Data Professional | Python SQL & Machine Learning</h2>
+        <div className="about-intro-wrapper">
+          {/* Replace profile.jpg with your exact photo filename inside the public folder */}
+          <img src="/profile.png" alt="Pratham Patil" className="profile-img-small" />
+          <p>
+            I am passionate about turning raw data into clear, actionable insights by building structured pipelines,
+            conducting exploratory analysis, and training foundational machine learning models.
+          </p>
+        </div>
       </div>
       <div className="about-grid">
         <div className="about-summary">
