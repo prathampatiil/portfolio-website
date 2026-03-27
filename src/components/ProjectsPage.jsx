@@ -11,7 +11,7 @@ function ProjectsPage() {
         </p>
       </div>
 
-      <GitHubProjects username="prathampatil" /> 
+      <GitHubProjects username="prathampatiil" /> 
     </section>
   );
 }
