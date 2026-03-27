@@ -55,7 +55,7 @@ function App() {
               {link.label}
             </button>
           ))}
-          
+
           <div style={{ marginLeft: '1rem', paddingLeft: '1rem', borderLeft: '1px solid var(--border-light)' }}>
             <ThemeToggle />
           </div>

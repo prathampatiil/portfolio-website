@@ -1,22 +1,26 @@
 import { useState, useEffect } from 'react';
 
-export default function GitHubProjects({ username = 'prathampatil' }) {
+export default function GitHubProjects({ username = 'prathampatiil', specificRepos = [] }) {
   const [repos, setRepos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`)
-      .then(res => {
-        if (!res.ok) throw new Error('API Rate limit or user not found');
-        return res.json();
-      })
+    // If specific repositories are provided, fetch only those
+    if (specificRepos && specificRepos.length > 0) {
+      Promise.all(
+        specificRepos.map(repoName =>
+          fetch(`https://api.github.com/repos/${username}/${repoName}`)
+            .then(res => {
+              if (!res.ok) return null;
+              return res.json();
+            })
+        )
+      )
       .then(data => {
-        if (Array.isArray(data)) {
-          // Sort by stars to demonstrate impact
-          const sorted = data.sort((a, b) => b.stargazers_count - a.stargazers_count).slice(0, 4);
-          setRepos(sorted);
-        }
+        // Filter out any repos that failed to load
+        const validRepos = data.filter(r => r !== null);
+        setRepos(validRepos);
         setLoading(false);
       })
       .catch(err => {
@@ -24,10 +28,30 @@ export default function GitHubProjects({ username = 'prathampatil' }) {
         setError(true);
         setLoading(false);
       });
-  }, [username]);
+    } else {
+      // Fallback: Fetch all public repos and sort by stars if no specific ones provided
+      fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`)
+        .then(res => {
+          if (!res.ok) throw new Error('API Rate limit or user not found');
+          return res.json();
+        })
+        .then(data => {
+          if (Array.isArray(data)) {
+            const sorted = data.sort((a, b) => b.stargazers_count - a.stargazers_count).slice(0, 4);
+            setRepos(sorted);
+          }
+          setLoading(false);
+        })
+        .catch(err => {
+          console.error(err);
+          setError(true);
+          setLoading(false);
+        });
+    }
+  }, [username, specificRepos]);
 
-  if (loading) return <div style={{ color: 'var(--accent)', textAlign: 'center', padding: '3rem', fontWeight: 'bold' }}>[*] Fetching live models from GitHub API...</div>;
-  if (error || repos.length === 0) return null; // Graceful fallback if no repos are fetched
+  if (loading) return <div style={{ color: 'var(--accent)', textAlign: 'center', padding: '3rem', fontWeight: 'bold' }}>[*] Fetching specified models from GitHub...</div>;
+  if (error || repos.length === 0) return <div style={{ color: 'var(--muted)', textAlign: 'center', padding: '3rem' }}>No projects available right now.</div>;
 
   return (
     <div className="project-grid" style={{ marginTop: '2.5rem' }}>
@@ -41,7 +65,7 @@ export default function GitHubProjects({ username = 'prathampatil' }) {
               </span>
             </div>
             <h3>{repo.name}</h3>
-            <p className="project-summary">{repo.description || "Experimental data pipeline and model weights. Active open-source development."}</p>
+            <p className="project-summary">{repo.description || "Data science pipeline and exploratory analysis."}</p>
             <div className="project-footer">
               <span className="timeline">Updated {new Date(repo.updated_at).toLocaleDateString()}</span>
               {repo.language && <div className="tech-list"><span className="skill-pill">{repo.language}</span></div>}
